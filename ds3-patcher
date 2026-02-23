@@ -10,6 +10,20 @@ import os
 import time
 import hashlib
 
+resolution = [
+    "800x500",
+    "800x600",
+    "864x486",
+    "928x580",
+    "960x540",
+    "960x600",
+    "1024x576",
+    "1024x768",
+    "1152x720",
+    "1280x720",     # only these exist in darksouls3.exe for some reason
+    "1920x1080",    #
+]
+
 def cleanup(game_dir_patched):
     if game_dir_patched.exists():
         eldenring_path = game_dir_patched / "DarkSoulsIII.exe"
@@ -46,7 +60,8 @@ if __name__ == "__main__":
     parser.add_argument("--all", action='store_true', help="Enable all options except rate adjustment and gamplay changes like `--disable-rune-loss`.")
 
     parser.add_argument("-s", "--skip-intro", action='store_true', help="Skip intro logos.")
-    parser.add_argument("-res", "--resolution", action='store', type=str, default="", help="Skip intro logos.")
+    parser.add_argument("-res", "--resolution", action='store', type=str, default="", help="Set a custom resolution.")
+    parser.add_argument("-ar", "--aspect-ratio", action='store', type=str, default="", help="Set a custom resolution.")
     parser.add_argument("-y", "--fix-camera", action='store_true', help="Disable camera reset.")
 
     patches = parser.parse_args(patcher_args)
@@ -65,37 +80,47 @@ if __name__ == "__main__":
 
     if os.path.exists(f"{patches.gamepath}/DarkSoulsIII.exe"):
         game_dir = Path(patches.gamepath)
-    elif os.path.exists("~/.local/share/Steam/steamapps/common/Dark Souls III/Game/DarkSoulsIII.exe"):
-        game_dir = Path("~/.local/share/Steam/steamapps/common/Dark Souls III/Game/DarkSoulsIII.exe")
-    elif os.path.exists("C:/Program Files/Steam/steamapps/common/Dark Souls III/Game/DarkSoulsIII.exe"):
-        game_dir = Path("C:/Program Files/Steam/steamapps/common/Dark Souls III/Game/DarkSoulsIII.exe")
-    elif os.path.exists("C:/Program Files (x86)/Steam/steamapps/common/Dark Souls III/Game/DarkSoulsIII.exe"):
-        game_dir = Path("C:/Program Files (x86)/Steam/steamapps/common/Dark Souls III/Game/DarkSoulsIII.exe")
+    elif os.path.exists("~/.local/share/Steam/steamapps/common/DARK SOULS III/Game/DarkSoulsIII.exe"):
+        game_dir = Path("~/.local/share/Steam/steamapps/common/DARK SOULS III/Game/DarkSoulsIII.exe")
+    elif os.path.exists("C:/Program Files/Steam/steamapps/common/DARK SOULS III/Game/DarkSoulsIII.exe"):
+        game_dir = Path("C:/Program Files/Steam/steamapps/common/DARK SOULS III/Game/DarkSoulsIII.exe")
+    elif os.path.exists("C:/Program Files (x86)/Steam/steamapps/common/DARK SOULS III/Game/DarkSoulsIII.exe"):
+        game_dir = Path("C:/Program Files (x86)/Steam/steamapps/common/DARK SOULS III/Game/DarkSoulsIII.exe")
     else:
         exit("\033[91mCould not find DarkSoulsIII.exe\033[m")
 
     exe_hex = open(game_dir / "DarkSoulsIII.exe", "rb").read().hex()
 
-    if hashlib.sha256(exe_hex.encode("utf-8")).hexdigest() != "dd314fa2638e728153081856c1b96d8f7442b88b1e70221407d13c9a730064cf":
+    if hashlib.sha256(exe_hex.encode("utf-8")).hexdigest() != "bab160012db5a9358bb036a263253b710f9a170559d6bbdcca24f69a1c7aaa0a":
         print("\033[91mWarning: DarkSoulsIII.exe is modified, this can lead to unexpected behavior\033[m")
 
-    if patches.resolution != "":
-        pattern = "80 07 00 00 38 04 00 00".replace(" ", "")
-        #                            ^^ ^^ hab ich mir dazu gedacht, gucken ob es stimmt
+    if patches.fix_camera or patches.all:
+        pattern = "80 be 6d 29 00 00 00 74".replace(" ", "")
         if (res := re.search(pattern, exe_hex)) is not None:
             addr = res.span()[0]
-
-            patches.resolution = patches.resolution.split("x")
-            if patches.resolution[0] > 0 and patches.resolution[1] > 0:
-                x = int_to_uint32_le_str(patches.resolution[0])
-                y = int_to_uint32_le_str(patches.resolution[1])
-
-                exe_hex = exe_hex[:addr] + x + y + exe_hex[addr + len(x + y):]
-                print(f"\033[92m✓ ds3-patcher: resolution {patches.resolution[0]}x{patches.resolution[1]}\033[m")
-            else:
-                print("\033[91m✗ ds3-patcher: resolution must be greater than zero\033[m")
+            patch = "80 be 6d 29 00 00 01 74".replace(" ", "")
+            exe_hex = exe_hex[:addr] + patch + exe_hex[addr + len(patch):]
+            print("\033[92m✓ ds3-patcher: fix camera\033[m")
         else:
-            print("\033[91m✗ ds3-patcher: resolution pattern scan failed\033[m")
+            print("\033[91m✗ ds3-patcher: fix camera pattern scan failed\033[m")
+
+    if patches.resolution != "":
+        for i in range(3):
+            pattern = "00 05 00 00 d0 02 00 00".replace(" ", "") # 1280x720
+            #pattern = "80 07 00 00 38 04 00 00".replace(" ", "") # 1920x1080
+            if (res := re.search(pattern, exe_hex)) is not None:
+                addr = res.span()[0]
+
+                res = patches.resolution.split("x")
+                if int(res[0]) > 0 and int(res[1]) > 0:
+                    x = int_to_uint32_le_str(res[0])
+                    y = int_to_uint32_le_str(res[1])
+                    exe_hex = exe_hex[:addr] + x + y + exe_hex[addr + len(x + y):]
+                    print(f"\033[92m✓ ds3-patcher: resolution {res[0]}x{res[1]}\033[m")
+                else:
+                    print("\033[91m✗ ds3-patcher: resolution must be greater than zero\033[m")
+            else:
+                print("\033[91m✗ ds3-patcher: resolution pattern scan failed\033[m")
 
     if patches.skip_intro or patches.all:
         pattern = "e8 1c ba fb ff 90 4d 8b c7 49 8b d4 48 8b c8 e8 0d ba fb ff".replace(" ", "")
@@ -112,9 +137,8 @@ if __name__ == "__main__":
             copy(f"{game_dir}/DarkSoulsIII.exe", f"{game_dir}/DarkSoulsIII.exe.bak")
             print("DarkSoulsIII.exe backuped as DarkSoulsIII.exe.bak")
         exe = f"{game_dir}/DarkSoulsIII.exe"
-        print("\033[92mEAC disabled, you cannot go online on official servers\033[m")
 
-        # patch Dark Souls III
+        # patch DARK SOULS III
         open(exe, "wb").write(bytes.fromhex(exe_hex))
         del exe_hex
 

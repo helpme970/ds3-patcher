@@ -29,7 +29,7 @@ A tool aimed at enhancing the experience when playing the game by patching the e
 
   - Example using [MangoHud](https://github.com/flightlessmango/MangoHud) and wine fullscreen FSR:
 
-    `python ds3-patcher -al -- env WINE_FULLSCREEN_FSR=1 MANGOHUD=1 MANGOHUD_CONFIG=histogram %command%`
+    `python ds3-patcher -all -res 1280x800 -- env WINE_FULLSCREEN_FSR=1 MANGOHUD=1 MANGOHUD_CONFIG=histogram %command%`
 
   - Example for enabling HDR using gamescope on Linux (reported to work on Plasma 6.1):
 

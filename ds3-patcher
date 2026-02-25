@@ -61,7 +61,6 @@ if __name__ == "__main__":
 
     parser.add_argument("-s", "--skip-intro", action='store_true', help="Skip intro logos.")
     parser.add_argument("-res", "--resolution", action='store', type=str, default="", help="Set a custom resolution.")
-    parser.add_argument("-ar", "--aspect-ratio", action='store', type=str, default="", help="Set a custom resolution.")
     parser.add_argument("-y", "--fix-camera", action='store_true', help="Disable camera reset.")
 
     patches = parser.parse_args(patcher_args)

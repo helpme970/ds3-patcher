@@ -48,7 +48,7 @@ If you have issues, verify your game files and make sure that no other patch is 
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------- |
 | `-x EXE` or `--executable EXE`          | The executable to launch, relative to the games folder. Mutually exclusive with `--with-eac`.             |
 | `--all`                                 | Enable all options.                                                                                       |
-| `-res` or `--resolution`                | Set a custom resolution.                                                                                  |
+| `-res` or `--resolution`                | Set a custom resolution. (You are still able to change the resolution via in-game settings)                                                                                 |
 | `-s` or `--skip-intro`                  | Skip intro logos at game start.                                                                           |
 | `-p` or `--permanent`                   | Make the patches permanent.                                                                               |
 | `-e` or `--player-camera`               | Always center camera to player.                                                                           |

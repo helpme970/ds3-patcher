@@ -10,12 +10,14 @@ A tool aimed at enhancing the experience when playing the game by patching the e
 
 > All features are Tested with Dark Souls 3 version 1.15.2
 
-> working with and without all the DLCs
+> working with and without the DLCs
 
 ## Dependencies
 - Python >= 3.8
 
 ## Usage
+
+> **IMPORTANT**: Make sure you are playing offline, playing online can result in a ban.
 
 1. Copy the file `ds3-patcher` to the game directory or specify the path to the game via the `--gamepath` option.
 2. In steam, set the game launch options to `python ds3-patcher ARGS -- %command%` or use permanent patch option. See [Features](#features) for available options.

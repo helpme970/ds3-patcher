@@ -50,7 +50,10 @@ def int_to_uint32_le_str(value):
     return "".join(f"{b:02x}" for b in le_bytes)
 
 if __name__ == "__main__":
-    patcher_args = sys.argv[1:]
+    if "--" in sys.argv:
+        patcher_args = sys.argv[1:sys.argv.index('--')]
+    else:
+        patcher_args = sys.argv[1:]
 
     parser = argparse.ArgumentParser(description="Patch Dark Souls 3 executable.")
 

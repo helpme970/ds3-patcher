@@ -42,7 +42,7 @@ A tool aimed at enhancing the experience when playing the game by patching the e
 Note: There might be some distros (e.g. older Ubuntu releases) that launch python 2 instead of 3 when running `python`. In that case you'll need to replace `python` with `python3` in the launch option line. 
 
 ## Troubleshooting
-If you have issues, verify your game files and make sure that no other patch is applied to Elden Ring.
+If you have issues, verify your game files and make sure that no other patch is applied to Dark Souls 3.
 
 ## Options
 

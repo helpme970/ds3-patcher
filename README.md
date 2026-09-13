@@ -19,8 +19,9 @@ A tool aimed at enhancing the experience when playing the game by patching the e
 
 > **IMPORTANT**: Make sure you are playing offline, playing online can result in a ban.
 
-1. Copy the file `ds3-patcher` to the game directory or specify the path to the game via the `--gamepath` option.
-2. In steam, set the game launch options to `python ds3-patcher ARGS -- %command%` or use permanent patch option. See [Features](#features) for available options.
+1. Download ds3-patcher
+2. Copy the file `ds3-patcher` to the game directory or specify the path to the game via the `--gamepath` option.
+3. In steam, set the game launch options to `python ds3-patcher ARGS -- %command%` or use permanent patch option. See [Features](#features) for available options.
   - Example for the Steam Deck for one (permanent) patch:
 
     `python ds3-patcher --all -p`
@@ -37,7 +38,7 @@ A tool aimed at enhancing the experience when playing the game by patching the e
 
     `ENABLE_GAMESCOPE_WSI=1 DXVK_HDR=1 gamescope -W 3440 -H 1440 -f -r 60 --hdr-enabled -- python ds3-patcher --all -- %command%`
     
-3. Launch the game through steam. `ds3-patcher` automatically launches a patched version of `DarkSoulsIII.exe`.
+4. Launch the game through steam. `ds3-patcher` automatically launches a patched version of `DarkSoulsIII.exe`.
 
 Note: There might be some distros (e.g. older Ubuntu releases) that launch python 2 instead of 3 when running `python`. In that case you'll need to replace `python` with `python3` in the launch option line. 
 

@@ -19,7 +19,8 @@ A tool aimed at enhancing the experience when playing the game by patching the e
 
 > **IMPORTANT**: Make sure you are playing offline, playing online can result in a ban.
 
-1. Download ds3-patcher
+1. Download and install [Python](https://www.python.org/)
+1. Download [ds3-patcher](https://raw.githubusercontent.com/helpme970/ds3-patcher/refs/heads/main/ds3-patcher)
 2. Copy the file `ds3-patcher` to the game directory or specify the path to the game via the `--gamepath` option.
 3. In steam, set the game launch options to `python ds3-patcher ARGS -- %command%` or use permanent patch option. See [Features](#features) for available options.
   - Example for the Steam Deck for one (permanent) patch:
